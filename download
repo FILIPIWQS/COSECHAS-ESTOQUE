@@ -1,0 +1,13 @@
+import { isAdmin, adminPasswordConfigured } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
+
+export async function POST(request) {
+  if (!adminPasswordConfigured()) {
+    return Response.json({ error: 'admin_password_not_set' }, { status: 503 });
+  }
+  if (!isAdmin(request)) {
+    return Response.json({ ok: false }, { status: 401 });
+  }
+  return Response.json({ ok: true });
+}
